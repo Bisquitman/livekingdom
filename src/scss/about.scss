@@ -1,0 +1,121 @@
+.about {
+  position: relative;
+  @include adaptiveValue("padding-top", 190, 30);
+  @include adaptiveValue("padding-bottom", 80, 30);
+
+  &::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: url("@img/about/bg-about.png") bottom / cover no-repeat;
+    opacity: 0.1;
+  }
+
+  // .about__container
+  &__container {
+    position: relative;
+  }
+  // .about__body
+  &__body {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    @include adaptiveValue("gap", 134, 30);
+    &:not(:last-child) {
+      @include adaptiveValue("margin-bottom", 98, 20);
+    }
+    @media (max-width: $tablet) {
+      flex-direction: column-reverse;
+    }
+  }
+  // .about__image
+  &__image {
+    flex: 0 0 51.25%;
+    outline: 1px solid $goldColor;
+    padding: toRem(18);
+  }
+  // .about__content
+  &__content {
+    flex: 1 1 auto;
+  }
+  // .about__block-header
+  &__block-header {
+  }
+  // .about__services
+  &__services {
+  }
+}
+.services-about {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  align-items: center;
+  justify-content: space-between;
+  gap: toRem(30);
+  max-width: toRem(1024);
+  text-align: center;
+  margin: 0 auto;
+
+  @media (max-width: em(610)) {
+    grid-template-columns: auto;
+    justify-content: center;
+  }
+
+  // .services-about__item
+  &__item {
+    // display: grid;
+    // justify-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: toRem(29);
+    height: 100%;
+  }
+  // .services-about__icon
+  &__icon {
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+    width: toRem(140);
+    height: toRem(140);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: toRem(20);
+
+    img {
+      position: relative;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      opacity: 0.5;
+      background: url("@img/bg-button.jpg") center / cover no-repeat;
+      transition: opacity 0.3s;
+    }
+
+    @media (any-hover: hover) {
+      &:hover {
+        color: $mainColor;
+        &::before {
+          opacity: 1;
+        }
+      }
+    }
+  }
+  // .services-about__label
+  &__label {
+    flex-grow: 1;
+    font-family: "Italiana";
+    font-size: toRem(24);
+    font-weight: 400;
+    text-transform: capitalize;
+  }
+}

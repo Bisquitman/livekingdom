@@ -1,0 +1,40 @@
+.services {
+  position: relative;
+  @include adaptiveValue("padding-top", 160, 30);
+  @include adaptiveValue("padding-bottom", 160, 30);
+  background-color: $bgDark;
+
+  &::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: url("@img/services/services-bg-decor.svg") top right no-repeat;
+  }
+
+  // .services__container
+  &__container {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: start;
+    z-index: 2;
+  }
+  // .services__image
+  &__image {
+    outline: 1px solid #fff;
+    padding: toRem(18);
+
+    img {
+      box-shadow: 10px 10px 40px 0px rgba(41, 41, 41, 0.21);
+    }
+  }
+  // .services__block-header
+  &__block-header {
+    max-width: toRem(460);
+    @include adaptiveValue("margin-left", 168, 30);
+    align-self: center;
+  }
+}
