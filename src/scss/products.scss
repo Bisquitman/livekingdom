@@ -146,8 +146,19 @@
     transform: translate(-50%, -50%);
     opacity: 0;
     visibility: hidden;
+    white-space: nowrap;
     transition: opacity 0.3s;
     z-index: 2;
+
+    @media (any-hover: none) {
+      top: auto;
+      bottom: 0;
+      width: 100%;
+      border-radius: 0;
+      transform: translate(-50%, 0);
+      opacity: 1;
+      visibility: visible;
+    }
   }
 }
 .rating {

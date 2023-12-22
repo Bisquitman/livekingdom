@@ -27,7 +27,7 @@
     color: $goldColor;
     font-family: Italiana;
     font-weight: 400;
-    @include adaptiveValue("font-size", 48, 36);
+    @include adaptiveValue("font-size", 48, 30);
     line-height: 120%;
     text-transform: capitalize;
   }
@@ -46,5 +46,9 @@
 
   // .block-header__button
   &__button {
+  }
+
+  // .block-header__contacts
+  &__contacts {
   }
 }

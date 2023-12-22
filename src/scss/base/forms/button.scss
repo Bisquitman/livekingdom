@@ -5,6 +5,8 @@
   position: relative;
   overflow: hidden;
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: toRem(10) toRem(40);
   outline: toRem(1) solid transparent;
   border-radius: 50px;
@@ -20,12 +22,13 @@
     top: 0;
     left: 0;
     opacity: 0.5;
-    background: url("@img/bg-button.jpg") center repeat;
+    background: url("@img/bg-button.jpg") center / cover no-repeat;
     transition: opacity 0.2s;
   }
   span {
     position: relative;
     width: 100%;
+    text-align: center;
   }
   @media (any-hover: hover) {
     &:hover {

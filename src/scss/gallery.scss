@@ -1,0 +1,85 @@
+.gallery {
+  @include adaptiveValue("padding-top", 160, 30);
+  @include adaptiveValue("padding-bottom", 160, 30);
+
+  // .gallery__container
+  &__container {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: space-between;
+    @include adaptiveValue("row-gap", 120, 30);
+
+    @media (max-width: $mobile) {
+      grid-template-columns: auto;
+    }
+  }
+  // .gallery__item
+  &__item {
+    &:nth-child(4n + 1),
+    &:nth-child(4n + 4),
+    &:nth-child(4n) {
+      @include adaptiveValue("width", 592, 300, 2, $containerWidth, 767.98);
+    }
+
+    // &:nth-child(4n + 1),
+    // &:nth-child(4n + 4) {
+    //   width: 77.862595%; /* 612/786 */
+    //   padding: 0 toRem(20) 0 0;
+    // }
+
+    &:nth-child(4n) {
+      // padding: 0 0 0 toRem(20);
+      @media (min-width: $mobile) {
+        justify-self: end;
+      }
+    }
+  }
+  // .gallery__image
+  &__image {
+    overflow: hidden;
+    img {
+      width: 100%;
+      transition: transform 0.3s;
+    }
+
+    &:not(:last-child) {
+      @include adaptiveValue("margin-bottom", 52, 15);
+    }
+
+    @media (any-hover: hover) {
+      &:hover {
+        img {
+          transform: scale(1.05);
+        }
+      }
+    }
+
+    @media (max-width: $mobile) {
+      width: 100%;
+    }
+  }
+  // .gallery__link
+  &__link {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    gap: toRem(10);
+    font-family: "Italiana", serif;
+    color: $goldColor;
+    @include adaptiveValue("font-size", 32, 24);
+    line-height: 120%;
+    transition: color 0.3s;
+
+    &::before {
+      margin-top: em(6,32);
+      flex-shrink: 0;
+      font-size: em(24, 32);
+    }
+
+    @media (any-hover: hover) {
+      &:hover {
+        color: darken($goldColor, 20%);
+      }
+    }
+  }
+}

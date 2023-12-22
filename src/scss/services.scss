@@ -11,30 +11,55 @@
     height: 100%;
     top: 0;
     left: 0;
-    background: url("@img/services/services-bg-decor.svg") top right no-repeat;
+    background: url("@img/services/services-bg-decor.svg") top right / 100% no-repeat;
+  }
+
+  @media (min-width: $tablet) {
+    &::after {
+      content: "";
+      position: absolute;
+      width: 41.510417%; /* 797/1920 */
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: $goldColor;
+    }
   }
 
   // .services__container
   &__container {
     position: relative;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    align-items: start;
+    display: flex;
+    align-items: flex-start;
     z-index: 2;
+
+    @media (max-width: $tablet) {
+      flex-direction: column-reverse;
+      gap: toRem(30);
+    }
   }
   // .services__image
   &__image {
+    flex: 0 1 50%;
     outline: 1px solid #fff;
     padding: toRem(18);
 
     img {
       box-shadow: 10px 10px 40px 0px rgba(41, 41, 41, 0.21);
     }
+
+    @media (max-width: $tablet) {
+      align-self: center;
+    }
   }
   // .services__block-header
   &__block-header {
-    max-width: toRem(460);
-    @include adaptiveValue("margin-left", 168, 30);
+    flex: 0 1 50%;
+    @include adaptiveValue("margin-left", 168, 50, 2, $containerWidth, 991.98);
     align-self: center;
+
+    @media (min-width: $tablet) {
+      max-width: toRem(460);
+    }
   }
 }

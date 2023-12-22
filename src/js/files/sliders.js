@@ -27,9 +27,8 @@ import "../../scss/base/swiper.scss";
 // Ініціалізація слайдерів
 function initSliders() {
   // Список слайдерів
-  // Перевіряємо, чи є слайдер на сторінці
   if (document.querySelector(".hero__slider")) {
-    const mainSlider = new Swiper(".hero__slider", {
+    new Swiper(".hero__slider", {
       modules: [Navigation, Controller, Parallax],
       observer: true,
       observeParents: true,
@@ -37,7 +36,54 @@ function initSliders() {
       slidesPerView: "auto",
       loop: true,
       spaceBetween: 30,
-      //autoHeight: true,
+      speed: 800,
+      navigation: {
+        prevEl: ".hero__arrow_prev",
+        nextEl: ".hero__arrow_next",
+      },
+
+      breakpoints: {
+        320: {
+          centeredSlides: true,
+          spaceBetween: 15,
+        },
+        768: {
+          centeredSlides: true,
+          spaceBetween: 30,
+        },
+        1200: {
+          centeredSlides: false,
+          spaceBetween: 30,
+        },
+      },
+
+      on: {
+        /*init: function (slider) {
+          slider.slides.forEach((slide) => {
+            const imageSrc = slide.querySelector(".slide-hero__image").getAttribute("src");
+            console.log("image: ", imageSrc);
+            const topImage = `
+              <div class="slide-hero__top-image">
+                <img src="${imageSrc}" alt="Image">
+              </div>
+            `;
+            const slideContent = slide.querySelector(".slide-hero__content");
+            slideContent.insertAjacentHTML('beforeend', topImage);
+          });
+        },*/
+      },
+    });
+  }
+
+  if (document.querySelector(".reviews__slider")) {
+    new Swiper(".reviews__slider", {
+      modules: [Navigation],
+      observer: true,
+      observeParents: true,
+      slidesPerView: 1,
+      loop: true,
+      spaceBetween: 30,
+      autoHeight: true,
       speed: 800,
       // centeredSlides: true,
 
@@ -72,43 +118,9 @@ function initSliders() {
 			},
 			*/
 
-      // Кнопки "вліво/вправо"
       navigation: {
-        prevEl: ".hero__arrow_prev",
-        nextEl: ".hero__arrow_next",
-      },
-
-      // Брейкпоінти
-      breakpoints: {
-        320: {
-          centeredSlides: true,
-          spaceBetween: 15,
-        },
-        768: {
-          centeredSlides: true,
-          spaceBetween: 30,
-        },
-        1200: {
-          centeredSlides: false,
-          spaceBetween: 30,
-        },
-      },
-
-      // Події
-      on: {
-        /*init: function (slider) {
-          slider.slides.forEach((slide) => {
-            const imageSrc = slide.querySelector(".slide-hero__image").getAttribute("src");
-            console.log("image: ", imageSrc);
-            const topImage = `
-              <div class="slide-hero__top-image">
-                <img src="${imageSrc}" alt="Image">
-              </div>
-            `;
-            const slideContent = slide.querySelector(".slide-hero__content");
-            slideContent.insertAjacentHTML('beforeend', topImage);
-          });
-        },*/
+        prevEl: ".reviews__arrow_prev",
+        nextEl: ".reviews__arrow_next",
       },
     });
   }
