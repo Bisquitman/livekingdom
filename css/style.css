@@ -409,6 +409,48 @@ textarea.input {
   font-style: italic;
 }
 
+.up {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 0.625rem;
+  width: 3.75rem;
+  height: 3.75rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 0.5rem;
+  border-radius: 50%;
+  -webkit-transform: rotate(-90deg);
+      -ms-transform: rotate(-90deg);
+          transform: rotate(-90deg);
+  font-size: 1.25rem;
+  color: #fff;
+  background-color: rgba(157, 135, 92, 0.15);
+  opacity: 1;
+  visibility: visible;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+  z-index: 50;
+}
+
+.up:hover {
+  background-color: rgba(157, 135, 92, 0.5);
+  color: #222220;
+}
+
+._watcher-view .up {
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
 .header {
   position: fixed;
   width: 100%;
@@ -489,6 +531,10 @@ textarea.input {
   line-height: 1.52;
   -webkit-transition: color 0.3s;
   transition: color 0.3s;
+}
+
+.menu__link._navigator-active {
+  color: #715d38;
 }
 
 .icon-menu {
@@ -977,6 +1023,28 @@ textarea.input {
 .products__button {
   -ms-grid-column-align: center;
       justify-self: center;
+}
+
+.item-product {
+  -webkit-transform: translate(0, 10%);
+      -ms-transform: translate(0, 10%);
+          transform: translate(0, 10%);
+  opacity: 0;
+  -webkit-transition: opacity 0.8s, -webkit-transform 0.8s;
+  transition: opacity 0.8s, -webkit-transform 0.8s;
+  transition: opacity 0.8s, transform 0.8s;
+  transition: opacity 0.8s, transform 0.8s, -webkit-transform 0.8s;
+}
+
+.item-product._watcher-view {
+  -webkit-transform: translate(0, 0);
+      -ms-transform: translate(0, 0);
+          transform: translate(0, 0);
+  opacity: 1;
+  -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+  transition: opacity 0.3s, -webkit-transform 0.3s;
+  transition: opacity 0.3s, transform 0.3s;
+  transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s;
 }
 
 .item-product__header {
@@ -2799,6 +2867,10 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item:not(.lg-zoomable).lg-co
 }
 
 @media (max-width: 47.99875em) {
+  .up {
+    display: none;
+  }
+
   .header__container {
     gap: 0;
     -ms-grid-columns: auto 1fr auto auto;

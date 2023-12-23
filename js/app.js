@@ -682,13 +682,14 @@
                 if (noHeader) {
                     headerItem = "header.header";
                     const headerElement = document.querySelector(headerItem);
+                    const headerContainer = headerElement.querySelector(".header__container");
                     if (!headerElement.classList.contains("_header-scroll")) {
-                        headerElement.style.cssText = `transition-duration: 0s;`;
+                        headerContainer.style.cssText = `transition-duration: 0s;`;
                         headerElement.classList.add("_header-scroll");
                         headerItemHeight = headerElement.offsetHeight;
                         headerElement.classList.remove("_header-scroll");
                         setTimeout((() => {
-                            headerElement.style.cssText = ``;
+                            headerContainer.style.cssText = ``;
                         }), 0);
                     } else headerItemHeight = headerElement.offsetHeight;
                 }
@@ -709,8 +710,8 @@
                         behavior: "smooth"
                     });
                 }
-                FLS(`[gotoBlock]: Юхуу...їдемо до ${targetBlock}`);
-            } else FLS(`[gotoBlock]: Йой... Такого блоку немає на сторінці: ${targetBlock}`);
+                FLS(`[gotoBlock]: Юхуу...крутим к ${targetBlock}`);
+            } else FLS(`[gotoBlock]: Ойой... Такого блока нет на странице: ${targetBlock}`);
         };
         function formFieldsInit(options = {
             viewPass: false,
@@ -4274,11 +4275,176 @@
             class_loaded: "_lazy-loaded",
             use_native: true
         });
+        class ScrollWatcher {
+            constructor(props) {
+                let defaultConfig = {
+                    logging: true
+                };
+                this.config = Object.assign(defaultConfig, props);
+                this.observer;
+                !document.documentElement.classList.contains("watcher") ? this.scrollWatcherRun() : null;
+            }
+            scrollWatcherUpdate() {
+                this.scrollWatcherRun();
+            }
+            scrollWatcherRun() {
+                document.documentElement.classList.add("watcher");
+                this.scrollWatcherConstructor(document.querySelectorAll("[data-watch]"));
+            }
+            scrollWatcherConstructor(items) {
+                if (items.length) {
+                    this.scrollWatcherLogging(`Прокинувся, стежу за об'єктами (${items.length})...`);
+                    let uniqParams = uniqArray(Array.from(items).map((function(item) {
+                        return `${item.dataset.watchRoot ? item.dataset.watchRoot : null}|${item.dataset.watchMargin ? item.dataset.watchMargin : "0px"}|${item.dataset.watchThreshold ? item.dataset.watchThreshold : 0}`;
+                    })));
+                    uniqParams.forEach((uniqParam => {
+                        let uniqParamArray = uniqParam.split("|");
+                        let paramsWatch = {
+                            root: uniqParamArray[0],
+                            margin: uniqParamArray[1],
+                            threshold: uniqParamArray[2]
+                        };
+                        let groupItems = Array.from(items).filter((function(item) {
+                            let watchRoot = item.dataset.watchRoot ? item.dataset.watchRoot : null;
+                            let watchMargin = item.dataset.watchMargin ? item.dataset.watchMargin : "0px";
+                            let watchThreshold = item.dataset.watchThreshold ? item.dataset.watchThreshold : 0;
+                            if (String(watchRoot) === paramsWatch.root && String(watchMargin) === paramsWatch.margin && String(watchThreshold) === paramsWatch.threshold) return item;
+                        }));
+                        let configWatcher = this.getScrollWatcherConfig(paramsWatch);
+                        this.scrollWatcherInit(groupItems, configWatcher);
+                    }));
+                } else this.scrollWatcherLogging("Сплю, немає об'єктів для стеження. ZzzZZzz");
+            }
+            getScrollWatcherConfig(paramsWatch) {
+                let configWatcher = {};
+                if (document.querySelector(paramsWatch.root)) configWatcher.root = document.querySelector(paramsWatch.root); else if (paramsWatch.root !== "null") this.scrollWatcherLogging(`Эмм... батьківського об'єкта ${paramsWatch.root} немає на сторінці`);
+                configWatcher.rootMargin = paramsWatch.margin;
+                if (paramsWatch.margin.indexOf("px") < 0 && paramsWatch.margin.indexOf("%") < 0) {
+                    this.scrollWatcherLogging(`йой, налаштування data-watch-margin потрібно задавати в PX або %`);
+                    return;
+                }
+                if (paramsWatch.threshold === "prx") {
+                    paramsWatch.threshold = [];
+                    for (let i = 0; i <= 1; i += .005) paramsWatch.threshold.push(i);
+                } else paramsWatch.threshold = paramsWatch.threshold.split(",");
+                configWatcher.threshold = paramsWatch.threshold;
+                return configWatcher;
+            }
+            scrollWatcherCreate(configWatcher) {
+                this.observer = new IntersectionObserver(((entries, observer) => {
+                    entries.forEach((entry => {
+                        this.scrollWatcherCallback(entry, observer);
+                    }));
+                }), configWatcher);
+            }
+            scrollWatcherInit(items, configWatcher) {
+                this.scrollWatcherCreate(configWatcher);
+                items.forEach((item => this.observer.observe(item)));
+            }
+            scrollWatcherIntersecting(entry, targetElement) {
+                if (entry.isIntersecting) {
+                    !targetElement.classList.contains("_watcher-view") ? targetElement.classList.add("_watcher-view") : null;
+                    this.scrollWatcherLogging(`Я бачу ${targetElement.classList}, додав клас _watcher-view`);
+                } else {
+                    targetElement.classList.contains("_watcher-view") ? targetElement.classList.remove("_watcher-view") : null;
+                    this.scrollWatcherLogging(`Я не бачу ${targetElement.classList}, прибрав клас _watcher-view`);
+                }
+            }
+            scrollWatcherOff(targetElement, observer) {
+                observer.unobserve(targetElement);
+                this.scrollWatcherLogging(`Я перестав стежити за ${targetElement.classList}`);
+            }
+            scrollWatcherLogging(message) {
+                this.config.logging ? FLS(`[Спостерігач]: ${message}`) : null;
+            }
+            scrollWatcherCallback(entry, observer) {
+                const targetElement = entry.target;
+                this.scrollWatcherIntersecting(entry, targetElement);
+                targetElement.hasAttribute("data-watch-once") && entry.isIntersecting ? this.scrollWatcherOff(targetElement, observer) : null;
+                document.dispatchEvent(new CustomEvent("watcherCallback", {
+                    detail: {
+                        entry
+                    }
+                }));
+            }
+        }
+        flsModules.watcher = new ScrollWatcher({});
+        class parallax_Parallax {
+            constructor(elements) {
+                if (elements.length) this.elements = Array.from(elements).map((el => new parallax_Parallax.Each(el, this.options)));
+            }
+            destroyEvents() {
+                this.elements.forEach((el => {
+                    el.destroyEvents();
+                }));
+            }
+            setEvents() {
+                this.elements.forEach((el => {
+                    el.setEvents();
+                }));
+            }
+        }
+        parallax_Parallax.Each = class {
+            constructor(parent) {
+                this.parent = parent;
+                this.elements = this.parent.querySelectorAll("[data-prlx]");
+                this.animation = this.animationFrame.bind(this);
+                this.offset = 0;
+                this.value = 0;
+                this.smooth = parent.dataset.prlxSmooth ? Number(parent.dataset.prlxSmooth) : 15;
+                this.setEvents();
+            }
+            setEvents() {
+                this.animationID = window.requestAnimationFrame(this.animation);
+            }
+            destroyEvents() {
+                window.cancelAnimationFrame(this.animationID);
+            }
+            animationFrame() {
+                const topToWindow = this.parent.getBoundingClientRect().top;
+                const heightParent = this.parent.offsetHeight;
+                const heightWindow = window.innerHeight;
+                const positionParent = {
+                    top: topToWindow - heightWindow,
+                    bottom: topToWindow + heightParent
+                };
+                const centerPoint = this.parent.dataset.prlxCenter ? this.parent.dataset.prlxCenter : "center";
+                if (positionParent.top < 30 && positionParent.bottom > -30) switch (centerPoint) {
+                  case "top":
+                    this.offset = -1 * topToWindow;
+                    break;
+
+                  case "center":
+                    this.offset = heightWindow / 2 - (topToWindow + heightParent / 2);
+                    break;
+
+                  case "bottom":
+                    this.offset = heightWindow - (topToWindow + heightParent);
+                    break;
+                }
+                this.value += (this.offset - this.value) / this.smooth;
+                this.animationID = window.requestAnimationFrame(this.animation);
+                this.elements.forEach((el => {
+                    const parameters = {
+                        axis: el.dataset.axis ? el.dataset.axis : "v",
+                        direction: el.dataset.direction ? el.dataset.direction + "1" : "-1",
+                        coefficient: el.dataset.coefficient ? Number(el.dataset.coefficient) : 5,
+                        additionalProperties: el.dataset.properties ? el.dataset.properties : ""
+                    };
+                    this.parameters(el, parameters);
+                }));
+            }
+            parameters(el, parameters) {
+                if (parameters.axis == "v") el.style.transform = `translate3D(0, ${(parameters.direction * (this.value / parameters.coefficient)).toFixed(2)}px,0) ${parameters.additionalProperties}`; else if (parameters.axis == "h") el.style.transform = `translate3D(${(parameters.direction * (this.value / parameters.coefficient)).toFixed(2)}px,0,0) ${parameters.additionalProperties}`;
+            }
+        };
+        if (document.querySelectorAll("[data-prlx-parent]")) flsModules.parallax = new parallax_Parallax(document.querySelectorAll("[data-prlx-parent]"));
         let addWindowScrollEvent = false;
         function pageNavigation() {
             document.addEventListener("click", pageNavigationAction);
             document.addEventListener("watcherCallback", pageNavigationAction);
             function pageNavigationAction(e) {
+                e.preventDefault();
                 if (e.type === "click") {
                     const targetElement = e.target;
                     if (targetElement.closest("[data-goto]")) {
@@ -6165,7 +6331,7 @@ PERFORMANCE OF THIS SOFTWARE.
         }
         const da = new DynamicAdapt("max");
         da.init();
-        window["FLS"] = true;
+        window["FLS"] = false;
         isWebp();
         menuInit();
         spollers();
