@@ -52,3 +52,39 @@
   &__contacts {
   }
 }
+
+.up {
+  position: fixed;
+  bottom: toRem(20);
+  right: toRem(10);
+  width: toRem(60);
+  height: toRem(60);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: toRem(8);
+  border-radius: 50%;
+  transform: rotate(-90deg);
+  font-size: toRem(20);
+  color: #fff;
+  background-color: rgba(157, 135, 92, 0.15);
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.5s;
+  z-index: 50;
+
+  &:hover {
+    background-color: rgba(157, 135, 92, 0.5);
+    color: #222220;
+  }
+
+  ._watcher-view & {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.5s;
+  }
+
+  @media (max-width: $mobile) {
+    display: none;
+  }
+}

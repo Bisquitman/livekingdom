@@ -70,6 +70,10 @@
       }
     }
 
+    &._navigator-active {
+      color: darken($bgGold, 30%);
+    }
+
     @media (max-width: $mobile) {
       color: #fff;
       font-size: toRem(28);

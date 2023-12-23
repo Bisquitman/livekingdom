@@ -50,6 +50,16 @@
 }
 
 .item-product {
+  transform: translate(0, 10%);
+  opacity: 0;
+  transition: opacity 0.8s, transform 0.8s;
+
+  &._watcher-view {
+    transform: translate(0, 0);
+    opacity: 1;
+    transition: opacity 0.3s, transform 0.3s;
+  }
+
   // .item-product__header
   &__header {
     position: relative;
